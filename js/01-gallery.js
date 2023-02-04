@@ -2,7 +2,7 @@ import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
 const galleryEl = document.querySelector('.gallery');
-const lbxVisible = basicLightbox.visible()
+// const lbxVisible = basicLightbox.visible()
 
 const galleryMarkup = galleryItems.map(({preview, original, description}) => 
     `<div class="gallery__item">
@@ -32,18 +32,18 @@ function onImageClick(event) {
         <img src="${event.target.dataset.source}" width="800" height="600">
     `, {
         onShow: (instance) => {
-            console.log('Open'); closeWithEsc(instance);
+            console.log('Open'); onModalOpen(instance);
         },
         onClose: () => {
-            console.log('Close'); galleryEl.removeEventListener('keydown', closeWithEsc);
+            console.log('Close'); window.removeEventListener('keydown', closeWithEsc);
         }
     });
 
     instance.show();    
 }
 
-function closeWithEsc(instance) {
-    galleryEl.addEventListener('keydown', (event) => {
+function onModalOpen(instance) {
+    window.addEventListener('keydown', (event) => {
         console.log(event.code);
         if (event.code === 'Escape') {
             instance.close();
@@ -51,6 +51,11 @@ function closeWithEsc(instance) {
     });
 }
 
-function removeEscClose(fu) {
-    galleryEl.removeEventListener('keydown', fu);
+function removeEscClose() {
+    window.removeEventListener('keydown', onEscPress);
+}
+
+function onModalClose(event) {
+    console.log(event);
+    removeEscClose();
 }
