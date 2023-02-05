@@ -21,6 +21,7 @@ galleryEl.innerHTML = galleryMarkup;
 
 galleryEl.addEventListener('click', onImageClick);
 
+let instance
 
 function onImageClick(event) {
     event.preventDefault();
@@ -28,29 +29,34 @@ function onImageClick(event) {
     if (event.target.nodeName !== 'IMG') {
         return;
     }
-    const instance = basicLightbox.create(`
+    instance = basicLightbox.create(`
         <img src="${event.target.dataset.source}" width="800" height="600">
     `, {
-        onShow: (instance) => {
-            console.log('Open'); closeWithEsc(instance);
+        onShow: () => {
+            console.log('Open'); escapeListener();
         },
         onClose: () => {
-            console.log('Close'); galleryEl.removeEventListener('keydown', closeWithEsc);
+            console.log('Close'); removeEscClose();
         }
     });
 
     instance.show();    
 }
 
-function closeWithEsc(instance) {
-    galleryEl.addEventListener('keydown', (event) => {
+
+function escapeListener() {
+    window.addEventListener('keydown', closeWithEsc)
+}
+
+
+function closeWithEsc() {
         console.log(event.code);
         if (event.code === 'Escape') {
             instance.close();
-        }
-    });
+    };
 }
 
-function removeEscClose(fu) {
-    galleryEl.removeEventListener('keydown', fu);
+
+function removeEscClose() {
+    window.removeEventListener('keydown', closeWithEsc);
 }
