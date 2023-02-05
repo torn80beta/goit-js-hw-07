@@ -23,7 +23,6 @@ let instance
 
 function onImageClick(event) {
     event.preventDefault();
-    console.log(event.target.nodeName);
     if (event.target.nodeName !== 'IMG') {
         return;
     }
@@ -31,10 +30,10 @@ function onImageClick(event) {
         <img src="${event.target.dataset.source}" width="800" height="600">
     `, {
         onShow: () => {
-            console.log('Open'); escapeListener();
+            escapeListener();
         },
         onClose: () => {
-            console.log('Close'); removeEscClose();
+            removeEscClose();
         }
     });
 
@@ -48,7 +47,7 @@ function escapeListener() {
 
 
 function closeWithEsc() {
-        console.log(event.code);
+        /* console.log(event.code); */ // Event listener check
         if (event.code === 'Escape') {
             instance.close();
     };
