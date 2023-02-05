@@ -2,8 +2,6 @@ import { galleryItems } from './gallery-items.js';
 // Change code below this line
 
 const galleryEl = document.querySelector('.gallery');
-// const lbxVisible = basicLightbox.visible()
-
 const galleryMarkup = galleryItems.map(({preview, original, description}) => 
     `<div class="gallery__item">
         <a class="gallery__link" href="${original}">
@@ -18,8 +16,9 @@ const galleryMarkup = galleryItems.map(({preview, original, description}) =>
 ).join('');
 
 galleryEl.innerHTML = galleryMarkup;
-
 galleryEl.addEventListener('click', onImageClick);
+
+let instance
 
 
 function onImageClick(event) {
@@ -28,34 +27,34 @@ function onImageClick(event) {
     if (event.target.nodeName !== 'IMG') {
         return;
     }
-    const instance = basicLightbox.create(`
+    instance = basicLightbox.create(`
         <img src="${event.target.dataset.source}" width="800" height="600">
     `, {
-        onShow: (instance) => {
-            console.log('Open'); onModalOpen(instance);
+        onShow: () => {
+            console.log('Open'); escapeListener();
         },
         onClose: () => {
-            console.log('Close'); window.removeEventListener('keydown', closeWithEsc);
+            console.log('Close'); removeEscClose();
         }
     });
 
     instance.show();    
 }
 
-function onModalOpen(instance) {
-    window.addEventListener('keydown', (event) => {
+
+function escapeListener() {
+    window.addEventListener('keydown', closeWithEsc)
+}
+
+
+function closeWithEsc() {
         console.log(event.code);
         if (event.code === 'Escape') {
             instance.close();
-        }
-    });
+    };
 }
+
 
 function removeEscClose() {
-    window.removeEventListener('keydown', onEscPress);
-}
-
-function onModalClose(event) {
-    console.log(event);
-    removeEscClose();
+    window.removeEventListener('keydown', closeWithEsc);
 }
